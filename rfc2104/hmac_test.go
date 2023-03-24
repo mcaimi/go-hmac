@@ -17,7 +17,7 @@ const (
 
 type testParams struct {
   k, m, hash string
-  hashFunc func(string, string) []byte
+  hashFunc func([]byte, []byte) []byte
 }
 
 var hmacByteTests = []testParams {
@@ -32,7 +32,7 @@ func TestHmac(t *testing.T) {
 
   // compute test cases
   for _, testCase := range hmacByteTests {
-    result = fmt.Sprintf("%x", testCase.hashFunc(testCase.k, testCase.m));
+    result = fmt.Sprintf("%x", testCase.hashFunc([]byte(testCase.k), []byte(testCase.m)));
     if result != testCase.hash {
       t.Errorf("Computed Hash %q is does not match test vector %q", result, testCase.hash);
     }

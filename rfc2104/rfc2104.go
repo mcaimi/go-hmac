@@ -27,12 +27,12 @@ type hmac struct {
 // HMAC is computed as
 // HMAC = HASH_FUNC((key xor outer_pad) + HASH_FUNC((key xor inner_pad) + message))
 // 
-func newHmac(key string, message string, digest_f func() hash.Hash) hmac {
+func newHmac(key []byte, message []byte, digest_f func() hash.Hash) hmac {
   var x hmac;
 
   // convert key and message strings to byte arrays
-  x.key = []byte(key);
-  x.message = []byte(message);
+  x.key = key;
+  x.message = message;
   // compute byte array lenghts
   x.keylen = len(x.key);
   x.msglen = len(x.message);

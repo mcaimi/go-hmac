@@ -8,7 +8,7 @@ import (
 )
 
 // compute HMAC with MD5 hash algirithm
-func MD5Hmac(key string, message string) []byte {
+func MD5Hmac(key []byte, message []byte) []byte {
   var x hmac = newHmac(key, message, md5.New);
   x.digest();
 
@@ -16,21 +16,24 @@ func MD5Hmac(key string, message string) []byte {
   return x.hmacBytes();
 }
 
-func SHA1Hmac(key string, message string) []byte {
+// compute HMAC with SHA-1 hash algirithm
+func SHA1Hmac(key []byte, message []byte) []byte {
   var x hmac = newHmac(key, message, sha1.New);
   x.digest();
 
   return x.hmacBytes();
 }
 
-func SHA256Hmac(key string, message string) []byte {
+// compute HMAC with SHA-256 hash algirithm
+func SHA256Hmac(key []byte, message []byte) []byte {
   var x hmac = newHmac(key, message, sha256.New);
   x.digest();
 
   return x.hmacBytes();
 }
 
-func SHA512Hmac(key string, message string) []byte {
+// compute HMAC with SHA-512 hash algirithm
+func SHA512Hmac(key []byte, message []byte) []byte {
   var x hmac = newHmac(key, message, sha512.New);
   x.digest();
 
