@@ -11,10 +11,11 @@ const INNER_PAD byte = 0x36
 const OUTER_PAD byte = 0x5C
 
 // hmac object type
-type hmac struct {
+type HMAC struct {
   key, message, inner, outer []byte;
   computer hash.Hash;
   blocklen, keylen, msglen int;
+  hmacAlgorithm string;
 }
 
 // 
@@ -27,8 +28,8 @@ type hmac struct {
 // HMAC is computed as
 // HMAC = HASH_FUNC((key xor outer_pad) + HASH_FUNC((key xor inner_pad) + message))
 // 
-func newHmac(key []byte, message []byte, digest_f func() hash.Hash) hmac {
-  var x hmac;
+func NewHmac(key []byte, message []byte, algorithm string) HMAC {
+  var x HMAC;
 
   // convert key and message strings to byte arrays
   x.key = key;
@@ -38,7 +39,7 @@ func newHmac(key []byte, message []byte, digest_f func() hash.Hash) hmac {
   x.msglen = len(x.message);
 
   // instantiate the digest computer with the selected hashing algorithm function
-  x.computer = digest_f();
+  x.computer = getHashFunc(algorithm)();
   x.blocklen = x.computer.BlockSize();
   // allocate space for computed inner and outer hash bytes
   x.inner = make([]byte, x.blocklen);
@@ -49,7 +50,7 @@ func newHmac(key []byte, message []byte, digest_f func() hash.Hash) hmac {
 }
 
 // Calculate the HMAC digest value
-func (h *hmac) digest() {
+func (h *HMAC) Digest() {
   // check key length: if greater than blocksize, then hash it
   // to keep it below the blocksize length
   if (h.keylen > h.blocklen) {
@@ -81,13 +82,13 @@ func (h *hmac) digest() {
 }
 
 // get hmac digest bytes
-func (h *hmac) hmacBytes() []byte {
+func (h *HMAC) HmacBytes() []byte {
   // return the hmac digest bytes as a byte array
   return h.computer.Sum(nil);
 }
 
 // get hmac digest in string format
-func (h *hmac) hmacString() string {
+func (h *HMAC) HmacString() string {
   // return the hmac digest in string format
   return fmt.Sprintf("%x", h.computer.Sum(nil));
 }

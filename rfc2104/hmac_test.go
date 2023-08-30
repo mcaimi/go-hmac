@@ -16,26 +16,26 @@ const (
 )
 
 type testParams struct {
-  k, m, hash string
-  hashFunc func([]byte, []byte) []byte
+  k, m, hash, hashFuncName string
+  hashFunc func([]byte, []byte, string) []byte
 }
 
 var hmacByteTests = []testParams {
-  testParams{TEST_KEY, TEST_MESSAGE, MD5_VALID_HASH, MD5Hmac},
-  testParams{TEST_KEY, TEST_MESSAGE, SHA1_VALID_HASH, SHA1Hmac},
-  testParams{TEST_KEY, TEST_MESSAGE, SHA256_VALID_HASH, SHA256Hmac},
-  testParams{TEST_KEY, TEST_MESSAGE, SHA512_VALID_HASH, SHA512Hmac},
+  testParams{TEST_KEY, TEST_MESSAGE, MD5_VALID_HASH, "md5", Hmac},
+  testParams{TEST_KEY, TEST_MESSAGE, SHA1_VALID_HASH, "sha1", Hmac},
+  testParams{TEST_KEY, TEST_MESSAGE, SHA256_VALID_HASH, "sha256", Hmac},
+  testParams{TEST_KEY, TEST_MESSAGE, SHA512_VALID_HASH, "sha512", Hmac},
 }
 
 func TestHmac(t *testing.T) {
   var result string;
 
-  // compute test cases
   for _, testCase := range hmacByteTests {
-    result = fmt.Sprintf("%x", testCase.hashFunc([]byte(testCase.k), []byte(testCase.m)));
+    result = fmt.Sprintf("%x", testCase.hashFunc([]byte(testCase.k), []byte(testCase.m), testCase.hashFuncName));
     if result != testCase.hash {
       t.Errorf("Computed Hash %q is does not match test vector %q", result, testCase.hash);
     }
     t.Logf("Passed test case with computed HMAC [%q]", result);
   }
 }
+

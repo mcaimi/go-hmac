@@ -22,7 +22,7 @@ Simply import the library and use the preferred hashing function:
 
   func main() {
     var digest []byte
-    digest = rfc2104.SHA1Hmac([]byte(KEY), []byte(MSG));
+    digest = rfc2104.Hmac([]byte(KEY), []byte(MSG), "sha1");
 
     fmt.Printf("%x\n", digest);
   }
